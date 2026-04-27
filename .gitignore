@@ -1,0 +1,52 @@
+```gitignore id="dbbr1w"
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Crash reports
+sysinfo.txt
+*.log
+
+# Unity generated cache
+Library/PackageCache/
+Library/ScriptAssemblies/
+
+# Addressables generated files
+Assets/AddressableAssetsData/*/*.bin*
+
+# Generated lighting data
+*.lighting
+
+# Android / iOS build files
+.gradle/
+*.apk
+*.aab
+DerivedData/
+*.xcworkspace
+
+# Test output
+TestResults/
+```
