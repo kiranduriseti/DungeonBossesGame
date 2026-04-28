@@ -6,7 +6,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Transform playerBody;
 
     [Header("Top Down Camera")]
-    [SerializeField] private Vector3 offset = new Vector3(0f, 12f, -8f);
+    [SerializeField] private Vector3 offset = new Vector3(0f, 12f, -2f);
     [SerializeField] private float followSmoothSpeed = 10f;
     [SerializeField] private bool lookAtPlayer = true;
 
@@ -16,7 +16,8 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private float walkBobAmount = 0.05f;
     [SerializeField] private float sprintBobSpeed = 16f;
     [SerializeField] private float sprintBobAmount = 0.1f;
-    [SerializeField] private float bobSmoothSpeed = 8f;
+
+    private PlayerRoll playerRoll;
 
     private float bobTimer;
     private bool isMoving;
@@ -26,8 +27,21 @@ public class CameraFollow : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        if (playerBody != null)
+            playerRoll = playerBody.GetComponent<PlayerRoll>();
     }
 
+    // private void LateUpdate()
+    // {
+    //     if (playerBody == null)
+    //         return;
+
+    //     FollowPlayer();
+
+    //     if (lookAtPlayer)
+    //         LookAtPlayer();
+    // }
     private void LateUpdate()
     {
         if (playerBody == null)
@@ -35,27 +49,39 @@ public class CameraFollow : MonoBehaviour
 
         FollowPlayer();
 
-        if (lookAtPlayer)
-            LookAtPlayer();
+        transform.rotation = Quaternion.Euler(55f, 0f, 0f);
     }
 
     private void FollowPlayer()
     {
-        Vector3 bobOffset = useCameraBob ? GetBobOffset() : Vector3.zero;
+        bool isRolling = playerRoll != null && playerRoll.IsRolling;
+
+        Vector3 bobOffset = useCameraBob && !isRolling
+            ? GetBobOffset()
+            : Vector3.zero;
+
+        if (isRolling)
+            bobTimer = 0f;
 
         Vector3 targetPosition = playerBody.position + offset + bobOffset;
 
-        transform.position = Vector3.Lerp(
-            transform.position,
-            targetPosition,
-            followSmoothSpeed * Time.deltaTime
-        );
+        if (isRolling)
+        {
+            transform.position = targetPosition;
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(
+                transform.position,
+                targetPosition,
+                followSmoothSpeed * Time.deltaTime
+            );
+        }
     }
 
     private void LookAtPlayer()
     {
-        Vector3 lookTarget = playerBody.position;
-        transform.LookAt(lookTarget);
+        transform.LookAt(playerBody.position);
     }
 
     private Vector3 GetBobOffset()
@@ -86,5 +112,6 @@ public class CameraFollow : MonoBehaviour
     public void SetPlayerBody(Transform newPlayerBody)
     {
         playerBody = newPlayerBody;
+        playerRoll = playerBody != null ? playerBody.GetComponent<PlayerRoll>() : null;
     }
 }
