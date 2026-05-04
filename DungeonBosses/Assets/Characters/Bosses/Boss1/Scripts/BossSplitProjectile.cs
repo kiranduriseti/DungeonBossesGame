@@ -11,7 +11,6 @@ public class BossSplitProjectile : MonoBehaviour
     [Header("Split")]
     [SerializeField] private int smallProjectileCount = 8;
     [SerializeField] private float smallProjectileDamage = 8f;
-    [SerializeField] private float splitAngle = 70f;
 
     private BossProjectilePool pool;
     private Vector3 direction;
@@ -58,25 +57,46 @@ public class BossSplitProjectile : MonoBehaviour
     private IEnumerator SplitRoutine()
     {
         yield return new WaitForSeconds(splitDelay);
-        Split();
+        yield return StartCoroutine(CircleBurstRoutine());
     }
 
-    private void Split()
+    private IEnumerator CircleBurstRoutine()
     {
         if (!active || hasSplit || pool == null)
-            return;
+            yield break;
 
         hasSplit = true;
 
+        int burstCount = 3;
+        float timeBetweenBursts = 0.25f;
+
+        float offsetStep = 360f / (smallProjectileCount * burstCount);
+
+        for (int burst = 0; burst < burstCount; burst++)
+        {
+            float burstOffset = burst * offsetStep;
+
+            FireCircleBurst(burstOffset);
+
+            yield return new WaitForSeconds(timeBetweenBursts);
+        }
+
+        Despawn();
+    }
+
+    private void FireCircleBurst(float angleOffset)
+    {
         for (int i = 0; i < smallProjectileCount; i++)
         {
-            float t = smallProjectileCount == 1 ? 0.5f : i / (float)(smallProjectileCount - 1);
-            float angle = Mathf.Lerp(-splitAngle * 0.5f, splitAngle * 0.5f, t);
+            float angle = (360f / smallProjectileCount) * i + angleOffset;
 
-            Vector3 spreadDir = Quaternion.AngleAxis(angle, Vector3.up) * direction;
+            Vector3 spreadDir =
+                Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward;
+
             Quaternion rotation = Quaternion.LookRotation(spreadDir);
 
-            BossSmallProjectile small = pool.GetSmallProjectile(transform.position, rotation);
+            BossSmallProjectile small =
+                pool.GetSmallProjectile(transform.position, rotation);
 
             if (small != null)
                 small.Initialize(pool, spreadDir, smallProjectileDamage);

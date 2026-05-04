@@ -38,6 +38,7 @@ public class PlayerHealth : MonoBehaviour
 
         InvokeHealthChanged();
 
+        Debug.Log(currentHealth);
         if (currentHealth <= 0f)
             Die();
     }

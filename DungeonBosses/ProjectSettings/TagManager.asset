@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Enemy
+  - Spell
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Ground
   - Player
   - Enemy
-  - 
+  - Wall
   - 
   - 
   - 
