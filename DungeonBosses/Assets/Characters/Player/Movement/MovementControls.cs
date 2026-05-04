@@ -160,7 +160,7 @@ public partial class @MovementControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8fd0ee3c-80cf-4f12-b771-c84367e0dc85"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -226,7 +226,7 @@ public partial class @MovementControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8f834e0b-fb9a-4ca3-8df3-6ab85eb927d4"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
